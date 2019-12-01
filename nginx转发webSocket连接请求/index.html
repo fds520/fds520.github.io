@@ -15,14 +15,14 @@
 
 
   <link rel="shortcut icon" href="/images/logo.png" type="image/png" />
-  <meta name="description" content="一、导读 nginx 是一个反向代理的轻量服务器，能对http请求进行转发，但是最新学习websocket发现，普通的nginx转发http请求时候无法转发websocket请求，今天就来介绍一下nginx如何转发websocket请求；与普通的端口转发差不多，只需要修改或加多一两个配置信息。 二、修改nginx.conf配置文件 1. http模块配置如下 1http &amp;#123;2    in">
+  <meta name="description" content="一、导读nginx 是一个反向代理的轻量服务器，能对http请求进行转发，但是最新学习websocket发现，普通的nginx转发http请求时候无法转发websocket请求，今天就来介绍一下nginx如何转发websocket请求；与普通的端口转发差不多，只需要修改或加多一两个配置信息。 二、修改nginx.conf配置文件1. http模块配置如下 http {     include">
 <meta property="og:type" content="article">
 <meta property="og:title" content="nginx转发webSocket连接请求">
 <meta property="og:url" content="https:&#x2F;&#x2F;fds520.gitee.io&#x2F;nginx%E8%BD%AC%E5%8F%91webSocket%E8%BF%9E%E6%8E%A5%E8%AF%B7%E6%B1%82&#x2F;index.html">
 <meta property="og:site_name" content="fds的博客~~">
-<meta property="og:description" content="一、导读 nginx 是一个反向代理的轻量服务器，能对http请求进行转发，但是最新学习websocket发现，普通的nginx转发http请求时候无法转发websocket请求，今天就来介绍一下nginx如何转发websocket请求；与普通的端口转发差不多，只需要修改或加多一两个配置信息。 二、修改nginx.conf配置文件 1. http模块配置如下 1http &amp;#123;2    in">
+<meta property="og:description" content="一、导读nginx 是一个反向代理的轻量服务器，能对http请求进行转发，但是最新学习websocket发现，普通的nginx转发http请求时候无法转发websocket请求，今天就来介绍一下nginx如何转发websocket请求；与普通的端口转发差不多，只需要修改或加多一两个配置信息。 二、修改nginx.conf配置文件1. http模块配置如下 http {     include">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-01T14:22:24.135Z">
+<meta property="og:updated_time" content="2019-12-01T14:39:23.635Z">
 <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@0.4.3/dist/css/mdui.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.15.8/styles/atom-one-dark.css">
@@ -31,7 +31,7 @@
   
   
   <link rel="stylesheet" href="//at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
-  <link rel="stylesheet" href="/css/style.css?v=1575210646515">
+  <link rel="stylesheet" href="/css/style.css?v=1575211243528">
 </head>
 
 <body class="mdui-drawer-body-left">
@@ -131,18 +131,47 @@
     </div>
   <div class="nexmoe-post-meta">
     <a><i class="nexmoefont icon-calendar-fill"></i>2019年12月01日</a>
-    <a><i class="nexmoefont icon-areachart"></i>274 字</a>
+    <a><i class="nexmoefont icon-areachart"></i>227 字</a>
     <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
     
     
   </div>
   <article>
-    <h1>一、导读</h1>
-<p>nginx 是一个反向代理的轻量服务器，能对http请求进行转发，但是最新学习websocket发现，普通的nginx转发http请求时候无法转发websocket请求，今天就来介绍一下nginx如何转发websocket请求；与普通的端口转发差不多，只需要修改或加多一两个配置信息。</p>
-<h1>二、修改nginx.conf配置文件</h1>
-<p><strong>1. http模块配置如下</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">http &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    include       mime.types;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    default_type  application&#x2F;octet-stream;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    log_format   &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">                      &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">                      &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">	access_log  &#x2F;home&#x2F;xxx&#x2F;logs&#x2F;access.log;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    sendfile        on;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    keepalive_timeout  65;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    # 添加 websocket 转发配置</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">	map $http_upgrade $connection_upgrade &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">	  default upgrade;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">	  &#39;&#39;      close;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">	&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">	server &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">		listen       8080;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">        server_name  127.0.0.1;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">		</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">	    location &#x2F;api &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">			# 添加 websocket 转发配置</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line">            proxy_http_version 1.1;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line">	        proxy_set_header Upgrade $http_upgrade;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">            proxy_set_header Connection &quot;upgrade&quot;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line">            </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line">            # 转发后台地址</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line">            proxy_pass              http:&#x2F;&#x2F;127.0.0.1:8081&#x2F;api;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line">        &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
-<p><strong>2. 以上有2个地方配置好，即可实现websocket请求转发。</strong></p>
+    <h1 id="一、导读"><a href="#一、导读" class="headerlink" title="一、导读"></a>一、导读</h1><p>nginx 是一个反向代理的轻量服务器，能对http请求进行转发，但是最新学习websocket发现，普通的nginx转发http请求时候无法转发websocket请求，今天就来介绍一下nginx如何转发websocket请求；与普通的端口转发差不多，只需要修改或加多一两个配置信息。</p>
+<h1 id="二、修改nginx-conf配置文件"><a href="#二、修改nginx-conf配置文件" class="headerlink" title="二、修改nginx.conf配置文件"></a>二、修改nginx.conf配置文件</h1><p><strong>1. http模块配置如下</strong></p>
+<pre><code>http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    log_format   &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;
+                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;
+                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;
+    access_log  /home/xxx/logs/access.log;
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+    # 添加 websocket 转发配置
+    map $http_upgrade $connection_upgrade {
+      default upgrade;
+      &apos;&apos;      close;
+    }
+
+    server {
+        listen       8080;
+        server_name  127.0.0.1;
+
+        location /api {
+            # 添加 websocket 转发配置
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection &quot;upgrade&quot;;
+
+            # 转发后台地址
+            proxy_pass              http://127.0.0.1:8081/api;
+        }
+    }
+}</code></pre><p><strong>2. 以上有2个地方配置好，即可实现websocket请求转发。</strong></p>
 
   </article>
   
@@ -177,7 +206,7 @@
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.8/build/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-<script src="/js/app.js?v=1575210646519"></script>
+<script src="/js/app.js?v=1575211243532"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazysizes@5.1.0/lazysizes.min.js"></script>
 
 

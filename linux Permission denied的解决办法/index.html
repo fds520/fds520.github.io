@@ -15,12 +15,12 @@
 
 
   <link rel="shortcut icon" href="/images/logo.png" type="image/png" />
-  <meta name="description" content="一、导读 一次再centos系统中执行自己写的批量启动系统的sh脚本，但是运行这个脚本出现了Permission denied 错误。 二、问题解析 这个两个单词就是没有权限的运行这个sh脚本的意思，只需要我们赋予权限即可。 三、解决方法 执行下面的命令  chmod u+x start.sh  解析：chmod是权限管理命令change the permissions mode of a fil">
+  <meta name="description" content="一、导读一次再centos系统中执行自己写的批量启动系统的sh脚本，但是运行这个脚本出现了Permission denied 错误。 二、问题解析这个两个单词就是没有权限的运行这个sh脚本的意思，只需要我们赋予权限即可。 三、解决方法执行下面的命令  chmod u+x start.sh  解析：chmod是权限管理命令change the permissions mode of a file的缩">
 <meta property="og:type" content="article">
 <meta property="og:title" content="linux Permission denied的解决办法">
 <meta property="og:url" content="https:&#x2F;&#x2F;fds520.gitee.io&#x2F;linux%20Permission%20denied%E7%9A%84%E8%A7%A3%E5%86%B3%E5%8A%9E%E6%B3%95&#x2F;index.html">
 <meta property="og:site_name" content="fds的博客~~">
-<meta property="og:description" content="一、导读 一次再centos系统中执行自己写的批量启动系统的sh脚本，但是运行这个脚本出现了Permission denied 错误。 二、问题解析 这个两个单词就是没有权限的运行这个sh脚本的意思，只需要我们赋予权限即可。 三、解决方法 执行下面的命令  chmod u+x start.sh  解析：chmod是权限管理命令change the permissions mode of a fil">
+<meta property="og:description" content="一、导读一次再centos系统中执行自己写的批量启动系统的sh脚本，但是运行这个脚本出现了Permission denied 错误。 二、问题解析这个两个单词就是没有权限的运行这个sh脚本的意思，只需要我们赋予权限即可。 三、解决方法执行下面的命令  chmod u+x start.sh  解析：chmod是权限管理命令change the permissions mode of a file的缩">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-11-30T15:00:16.617Z">
 <meta name="twitter:card" content="summary">
@@ -31,7 +31,7 @@
   
   
   <link rel="stylesheet" href="//at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
-  <link rel="stylesheet" href="/css/style.css?v=1575210646520">
+  <link rel="stylesheet" href="/css/style.css?v=1575211243533">
 </head>
 
 <body class="mdui-drawer-body-left">
@@ -137,18 +137,13 @@
     
   </div>
   <article>
-    <h1>一、导读</h1>
-<p>一次再centos系统中执行自己写的批量启动系统的sh脚本，但是运行这个脚本出现了Permission denied 错误。</p>
-<h1>二、问题解析</h1>
-<p>这个两个单词就是没有权限的运行这个sh脚本的意思，只需要我们赋予权限即可。</p>
-<h1>三、解决方法</h1>
-<p>执行下面的命令</p>
+    <h1 id="一、导读"><a href="#一、导读" class="headerlink" title="一、导读"></a>一、导读</h1><p>一次再centos系统中执行自己写的批量启动系统的sh脚本，但是运行这个脚本出现了Permission denied 错误。</p>
+<h1 id="二、问题解析"><a href="#二、问题解析" class="headerlink" title="二、问题解析"></a>二、问题解析</h1><p>这个两个单词就是没有权限的运行这个sh脚本的意思，只需要我们赋予权限即可。</p>
+<h1 id="三、解决方法"><a href="#三、解决方法" class="headerlink" title="三、解决方法"></a>三、解决方法</h1><p>执行下面的命令</p>
 <blockquote>
 <p>chmod u+x start.sh</p>
 </blockquote>
-<p><strong>解析</strong>：chmod是权限管理命令change the permissions mode of a file的缩写。。
-u代表所有者，x代表执行权限。 + 表示增加权限。
-chmod u+x start.sh 就表示对当前目录下的start.sh文件的所有者增加可执行权限。</p>
+<p><strong>解析</strong>：chmod是权限管理命令change the permissions mode of a file的缩写。。<br>u代表所有者，x代表执行权限。 + 表示增加权限。<br>chmod u+x start.sh 就表示对当前目录下的start.sh文件的所有者增加可执行权限。</p>
 
   </article>
   
@@ -183,7 +178,7 @@ chmod u+x start.sh 就表示对当前目录下的start.sh文件的所有者增�
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.8/build/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-<script src="/js/app.js?v=1575210646522"></script>
+<script src="/js/app.js?v=1575211243534"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazysizes@5.1.0/lazysizes.min.js"></script>
 
 

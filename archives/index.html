@@ -28,7 +28,7 @@
   
   
   <link rel="stylesheet" href="//at.alicdn.com/t/font_1038733_0xvrvpg9c0r.css">
-  <link rel="stylesheet" href="/css/style.css?v=1575210646531">
+  <link rel="stylesheet" href="/css/style.css?v=1575211243540">
 </head>
 
 <body class="mdui-drawer-body-left">
@@ -132,19 +132,48 @@
         </a>
         <div class="nexmoe-post-meta">
             <a><i class="nexmoefont icon-calendar-fill"></i>2019年12月01日</a>
-            <a><i class="nexmoefont icon-areachart"></i>274 字</a>
+            <a><i class="nexmoefont icon-areachart"></i>227 字</a>
             <a><i class="nexmoefont icon-time-circle-fill"></i>大概 1 分钟</a>
             
             
         </div>
         <article>
             
-            <h1>一、导读</h1>
-<p>nginx 是一个反向代理的轻量服务器，能对http请求进行转发，但是最新学习websocket发现，普通的nginx转发http请求时候无法转发websocket请求，今天就来介绍一下nginx如何转发websocket请求；与普通的端口转发差不多，只需要修改或加多一两个配置信息。</p>
-<h1>二、修改nginx.conf配置文件</h1>
-<p><strong>1. http模块配置如下</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span></pre></td><td class="code"><pre><span class="line">http &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">2</span></pre></td><td class="code"><pre><span class="line">    include       mime.types;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">3</span></pre></td><td class="code"><pre><span class="line">    default_type  application&#x2F;octet-stream;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">4</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">5</span></pre></td><td class="code"><pre><span class="line">    log_format   &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">6</span></pre></td><td class="code"><pre><span class="line">                      &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">7</span></pre></td><td class="code"><pre><span class="line">                      &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">8</span></pre></td><td class="code"><pre><span class="line">	access_log  &#x2F;home&#x2F;xxx&#x2F;logs&#x2F;access.log;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">9</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">10</span></pre></td><td class="code"><pre><span class="line">    sendfile        on;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">11</span></pre></td><td class="code"><pre><span class="line">    keepalive_timeout  65;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">12</span></pre></td><td class="code"><pre><span class="line">    </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">13</span></pre></td><td class="code"><pre><span class="line">    # 添加 websocket 转发配置</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">14</span></pre></td><td class="code"><pre><span class="line">	map $http_upgrade $connection_upgrade &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">15</span></pre></td><td class="code"><pre><span class="line">	  default upgrade;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">16</span></pre></td><td class="code"><pre><span class="line">	  &#39;&#39;      close;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">17</span></pre></td><td class="code"><pre><span class="line">	&#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">18</span></pre></td><td class="code"><pre><span class="line"></span></pre></td></tr><tr><td class="gutter"><pre><span class="line">19</span></pre></td><td class="code"><pre><span class="line">	server &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">20</span></pre></td><td class="code"><pre><span class="line">		listen       8080;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">21</span></pre></td><td class="code"><pre><span class="line">        server_name  127.0.0.1;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">22</span></pre></td><td class="code"><pre><span class="line">		</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">23</span></pre></td><td class="code"><pre><span class="line">	    location &#x2F;api &#123;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">24</span></pre></td><td class="code"><pre><span class="line">			# 添加 websocket 转发配置</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">25</span></pre></td><td class="code"><pre><span class="line">            proxy_http_version 1.1;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">26</span></pre></td><td class="code"><pre><span class="line">	        proxy_set_header Upgrade $http_upgrade;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">27</span></pre></td><td class="code"><pre><span class="line">            proxy_set_header Connection &quot;upgrade&quot;;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">28</span></pre></td><td class="code"><pre><span class="line">            </span></pre></td></tr><tr><td class="gutter"><pre><span class="line">29</span></pre></td><td class="code"><pre><span class="line">            # 转发后台地址</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">30</span></pre></td><td class="code"><pre><span class="line">            proxy_pass              http:&#x2F;&#x2F;127.0.0.1:8081&#x2F;api;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">31</span></pre></td><td class="code"><pre><span class="line">        &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">32</span></pre></td><td class="code"><pre><span class="line">    &#125;</span></pre></td></tr><tr><td class="gutter"><pre><span class="line">33</span></pre></td><td class="code"><pre><span class="line">&#125;</span></pre></td></tr></table></figure>
-<p><strong>2. 以上有2个地方配置好，即可实现websocket请求转发。</strong></p>
+            <h1 id="一、导读"><a href="#一、导读" class="headerlink" title="一、导读"></a>一、导读</h1><p>nginx 是一个反向代理的轻量服务器，能对http请求进行转发，但是最新学习websocket发现，普通的nginx转发http请求时候无法转发websocket请求，今天就来介绍一下nginx如何转发websocket请求；与普通的端口转发差不多，只需要修改或加多一两个配置信息。</p>
+<h1 id="二、修改nginx-conf配置文件"><a href="#二、修改nginx-conf配置文件" class="headerlink" title="二、修改nginx.conf配置文件"></a>二、修改nginx.conf配置文件</h1><p><strong>1. http模块配置如下</strong></p>
+<pre><code>http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    log_format   &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;
+                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;
+                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;
+    access_log  /home/xxx/logs/access.log;
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+    # 添加 websocket 转发配置
+    map $http_upgrade $connection_upgrade {
+      default upgrade;
+      &apos;&apos;      close;
+    }
+
+    server {
+        listen       8080;
+        server_name  127.0.0.1;
+
+        location /api {
+            # 添加 websocket 转发配置
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection &quot;upgrade&quot;;
+
+            # 转发后台地址
+            proxy_pass              http://127.0.0.1:8081/api;
+        }
+    }
+}</code></pre><p><strong>2. 以上有2个地方配置好，即可实现websocket请求转发。</strong></p>
 
             
         </article>
@@ -169,18 +198,13 @@
         </div>
         <article>
             
-            <h1>一、导读</h1>
-<p>一次再centos系统中执行自己写的批量启动系统的sh脚本，但是运行这个脚本出现了Permission denied 错误。</p>
-<h1>二、问题解析</h1>
-<p>这个两个单词就是没有权限的运行这个sh脚本的意思，只需要我们赋予权限即可。</p>
-<h1>三、解决方法</h1>
-<p>执行下面的命令</p>
+            <h1 id="一、导读"><a href="#一、导读" class="headerlink" title="一、导读"></a>一、导读</h1><p>一次再centos系统中执行自己写的批量启动系统的sh脚本，但是运行这个脚本出现了Permission denied 错误。</p>
+<h1 id="二、问题解析"><a href="#二、问题解析" class="headerlink" title="二、问题解析"></a>二、问题解析</h1><p>这个两个单词就是没有权限的运行这个sh脚本的意思，只需要我们赋予权限即可。</p>
+<h1 id="三、解决方法"><a href="#三、解决方法" class="headerlink" title="三、解决方法"></a>三、解决方法</h1><p>执行下面的命令</p>
 <blockquote>
 <p>chmod u+x start.sh</p>
 </blockquote>
-<p><strong>解析</strong>：chmod是权限管理命令change the permissions mode of a file的缩写。。
-u代表所有者，x代表执行权限。 + 表示增加权限。
-chmod u+x start.sh 就表示对当前目录下的start.sh文件的所有者增加可执行权限。</p>
+<p><strong>解析</strong>：chmod是权限管理命令change the permissions mode of a file的缩写。。<br>u代表所有者，x代表执行权限。 + 表示增加权限。<br>chmod u+x start.sh 就表示对当前目录下的start.sh文件的所有者增加可执行权限。</p>
 
             
         </article>
@@ -205,8 +229,7 @@ chmod u+x start.sh 就表示对当前目录下的start.sh文件的所有者增�
         </div>
         <article>
             
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.
-你好~~</p>
+            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.<br>你好~~</p>
 
             
         </article>
@@ -224,43 +247,33 @@ chmod u+x start.sh 就表示对当前目录下的start.sh文件的所有者增�
         </a>
         <div class="nexmoe-post-meta">
             <a><i class="nexmoefont icon-calendar-fill"></i>2019年11月30日</a>
-            <a><i class="nexmoefont icon-areachart"></i>655 字</a>
+            <a><i class="nexmoefont icon-areachart"></i>654 字</a>
             <a><i class="nexmoefont icon-time-circle-fill"></i>大概 2 分钟</a>
             
             
         </div>
         <article>
             
-            <h1><center>微信小程序培训</center></h1>
-<h2>一、微信小程序介绍</h2>
-<p>微信小程序，简称小程序，英文名Mini Program，是一种不需要下载安装即可使用的应用，它实现了应用“触手可及”的梦想，用户扫一扫或搜一下即可打开应用。</p>
-<h3>小程序与公众号相比具有哪些优势？</h3>
-<ol>
+            <h1 id="微信小程序培训"><a href="#微信小程序培训" class="headerlink" title="微信小程序培训"></a><center>微信小程序培训</center></h1><h2 id="一、微信小程序介绍"><a href="#一、微信小程序介绍" class="headerlink" title="一、微信小程序介绍"></a>一、微信小程序介绍</h2><p>微信小程序，简称小程序，英文名Mini Program，是一种不需要下载安装即可使用的应用，它实现了应用“触手可及”的梦想，用户扫一扫或搜一下即可打开应用。</p>
+<h3 id="小程序与公众号相比具有哪些优势？"><a href="#小程序与公众号相比具有哪些优势？" class="headerlink" title="小程序与公众号相比具有哪些优势？"></a>小程序与公众号相比具有哪些优势？</h3><ol>
 <li>公众号加载速度慢，用户体验远不如小程序的顺序打开；</li>
 <li>公众号的用户入口太深、订阅号折叠，而小程序只需扫二维码或搜索即可进入；</li>
 <li>公众号只能退出后才能进入聊天框，而小程序可以微信、聊天框时时切换；</li>
 <li>公众号数据不能时时上传，而小程序离线后数据时时上报，及时掌握运营状态；</li>
 <li>公众号接口少、开放功能少，而小程序接口多功能强大。</li>
 </ol>
-<h3>小程序与传统APP相比又有哪些优势？</h3>
-<ol>
+<h3 id="小程序与传统APP相比又有哪些优势？"><a href="#小程序与传统APP相比又有哪些优势？" class="headerlink" title="小程序与传统APP相比又有哪些优势？"></a>小程序与传统APP相比又有哪些优势？</h3><ol>
 <li>小程序开发成本比APP低；</li>
 <li>小程序获客成本远低于APP；</li>
 <li>APP开发周期慢，制作成本高、而小程序符合快速创业的精神，降低创业门槛；</li>
 <li>APP生态体系已饱和，App Store排名竞争激烈，而小程序属于新生事物，发展空间充满无限想象。</li>
 </ol>
-<h2>二、开发准备</h2>
-<h3>账号注册</h3>
-<p>地址：<a href="https://mp.weixin.qq.com" target="_blank" rel="noopener">https://mp.weixin.qq.com</a></p>
-<h3>开发工具下载</h3>
-<p>微信开发者工具：<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" target="_blank" rel="noopener">https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html</a></p>
+<h2 id="二、开发准备"><a href="#二、开发准备" class="headerlink" title="二、开发准备"></a>二、开发准备</h2><h3 id="账号注册"><a href="#账号注册" class="headerlink" title="账号注册"></a>账号注册</h3><p>地址：<a href="https://mp.weixin.qq.com" target="_blank" rel="noopener">https://mp.weixin.qq.com</a></p>
+<h3 id="开发工具下载"><a href="#开发工具下载" class="headerlink" title="开发工具下载"></a>开发工具下载</h3><p>微信开发者工具：<a href="https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html" target="_blank" rel="noopener">https://developers.weixin.qq.com/miniprogram/dev/devtools/download.html</a></p>
 <p>webstorm：<a href="http://www.jetbrains.com/webstorm/" target="_blank" rel="noopener">http://www.jetbrains.com/webstorm/</a></p>
-<h2>三、wepy开发语言介绍</h2>
-<p>WePY 框架在开发过程中参考了 Vue 等现有框架的一些语法风格和功能特性，对原生小程序的开发模式进行了再次封装，更贴近于 MVVM 架构模式, 并支持ES6/7的一些新特性。
-<a href="https://wepyjs.github.io/wepy-docs/" target="_blank" rel="noopener">wepy官网地址</a></p>
+<h2 id="三、wepy开发语言介绍"><a href="#三、wepy开发语言介绍" class="headerlink" title="三、wepy开发语言介绍"></a>三、wepy开发语言介绍</h2><p>WePY 框架在开发过程中参考了 Vue 等现有框架的一些语法风格和功能特性，对原生小程序的开发模式进行了再次封装，更贴近于 MVVM 架构模式, 并支持ES6/7的一些新特性。<br><a href="https://wepyjs.github.io/wepy-docs/" target="_blank" rel="noopener">wepy官网地址</a></p>
 <p>原生小程序参考地址：<a href="https://developers.weixin.qq.com/miniprogram/dev/framework/structure.html" target="_blank" rel="noopener">https://developers.weixin.qq.com/miniprogram/dev/framework/structure.html</a></p>
-<h2>四、目录结构</h2>
-<pre><code>├── src
+<h2 id="四、目录结构"><a href="#四、目录结构" class="headerlink" title="四、目录结构"></a>四、目录结构</h2><pre><code>├── src
 │   ├── components                   // 组件
 │   │   ├── alertImgCode.wpy         // 访问太快展示图形验证码组件
 │   │   ├── share.wpy                // 分享组件
@@ -280,15 +293,7 @@ chmod u+x start.sh 就表示对当前目录下的start.sh文件的所有者增�
 │   ├── apiUrl.js                    // 请求地址
 │   ├── app.wpy                      // 小程序全局配置文件
 ├── wepy.config.js                   // wepy配置文件
-├── package.json                     // 项目依赖
-</code></pre>
-<h2>五、package.json解读</h2>
-<h2>六、app.wpy解读（全局配置文件）</h2>
-<h2>七、apiUrl.js解读</h2>
-<h2>八、http.js解读</h2>
-<h2>九、components组件解读</h2>
-<h2>十、pages页面解读</h2>
-
+├── package.json                     // 项目依赖</code></pre><h2 id="五、package-json解读"><a href="#五、package-json解读" class="headerlink" title="五、package.json解读"></a>五、package.json解读</h2><h2 id="六、app-wpy解读（全局配置文件）"><a href="#六、app-wpy解读（全局配置文件）" class="headerlink" title="六、app.wpy解读（全局配置文件）"></a>六、app.wpy解读（全局配置文件）</h2><h2 id="七、apiUrl-js解读"><a href="#七、apiUrl-js解读" class="headerlink" title="七、apiUrl.js解读"></a>七、apiUrl.js解读</h2><h2 id="八、http-js解读"><a href="#八、http-js解读" class="headerlink" title="八、http.js解读"></a>八、http.js解读</h2><h2 id="九、components组件解读"><a href="#九、components组件解读" class="headerlink" title="九、components组件解读"></a>九、components组件解读</h2><h2 id="十、pages页面解读"><a href="#十、pages页面解读" class="headerlink" title="十、pages页面解读"></a>十、pages页面解读</h2>
             
         </article>
         <div class="footerDiv"></div>
@@ -312,7 +317,7 @@ chmod u+x start.sh 就表示对当前目录下的start.sh文件的所有者增�
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.8/build/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 
-<script src="/js/app.js?v=1575210646533"></script>
+<script src="/js/app.js?v=1575211243541"></script>
 <script src="https://cdn.jsdelivr.net/npm/lazysizes@5.1.0/lazysizes.min.js"></script>
 
 
